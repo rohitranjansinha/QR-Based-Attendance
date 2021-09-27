@@ -25,10 +25,10 @@ public class Controller {
         //System.out.println("uid caught = "+uid);
         try{
             String timestamp = service.persistAttendance(uid,name);
-            return "<h1>Attendance Marked Successfully</h1>";
+            return "<center><h1>Attendance Marked Successfully</h1></center>";
         }catch (Exception e){
             System.out.println("error: "+e.getMessage());
-            return "<h1>Try again</h1>";
+            return "<center><h1>Try again</h1></center>";
         }
     }
 
@@ -36,9 +36,9 @@ public class Controller {
     public String getCSV(){
         try{
             service.createCSV();
-            return "<h1>check console</h1>";
+            return "<center><h1>check console</h1></center>";
         }catch (Exception e){
-            return "<h1>Some error</h1>";
+            return "<center><h1>Some error</h1></center>";
         }
     }
 }

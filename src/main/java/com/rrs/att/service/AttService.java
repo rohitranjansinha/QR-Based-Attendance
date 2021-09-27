@@ -12,16 +12,15 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Service
 public class AttService {
     private String currentTimestamp(String format){
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat(format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("IST"));
         Date date = new Date();
         return dateFormat.format(date);
     }
@@ -49,7 +48,7 @@ public class AttService {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<Map<String,Object>> data = new ArrayList<>();
         for (QueryDocumentSnapshot document : documents) {
-            System.out.println("doc = "+document.getData());
+            //System.out.println("doc = "+document.getData());
             data.add(document.getData());
         }
         System.out.println("data = "+data);
@@ -79,7 +78,7 @@ public class AttService {
                             break;
                     }
                 }
-                System.out.println("attendee = "+attendee.toString());
+                //System.out.println("attendee = "+attendee.toString());
                 if(!attendee.getName().equals("HelloWorld")){
                     StringBuilder sb = new StringBuilder();
                     sb.append(attendee.getTimestamp()).append(",")
