@@ -40,7 +40,7 @@ public class AttService {
                 .set(attendee);
         return collectionsApuFuture.get().getUpdateTime().toString();
     }
-    public void createCSV() throws ExecutionException, InterruptedException {
+    public boolean createCSV() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         //asynchronously retrieve all documents
         ApiFuture<QuerySnapshot> future = firestore.collection("attendance").get();
@@ -89,8 +89,10 @@ public class AttService {
                 }
             }
             pw.close();
+            return true;
         }catch (Exception e){
             System.out.println("file error  :"+e.getMessage());
+            return false;
         }
     }
 }
