@@ -1,10 +1,7 @@
 package com.rrs.att.service;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.rrs.att.model.Attendee;
 import org.springframework.stereotype.Service;
@@ -35,16 +32,40 @@ public class AttService {
     public String persistAttendance(String uid, String name) throws ExecutionException, InterruptedException {
         String timestamp = currentTimestamp("dd/MM/yyyy HH:mm:ss");
         Firestore firestore = FirestoreClient.getFirestore();
+        System.out.println("uid = "+uid);
+        Query query = firestore.collection("attendance").whereEqualTo("uid",uid);
+        try{
+            boolean flag = query.get().get().isEmpty();
+            System.out.println("flag : "+flag);
+            if(!flag){
+                return null;
+            }
+        }catch (Exception e){
+            System.out.println("error:"+e.getMessage());
+            return "";
+        }
         Attendee attendee = new Attendee(uid,timestamp,name,getGender(name));
         ApiFuture<WriteResult> collectionsApuFuture = firestore.collection("attendance").document(attendee.getUID())
                 .set(attendee);
         return collectionsApuFuture.get().getUpdateTime().toString();
     }
+//    public void tempFunc(){
+//        Firestore firestore = FirestoreClient.getFirestore();
+//        Query query = firestore.collection("attendance").whereEqualTo("uid","AJS12847");
+//        try {
+//            System.out.println("query: "+query.get().get().isEmpty());
+//        } catch (InterruptedException e) {
+//            System.out.println("error "+e.getMessage());
+//        } catch (ExecutionException e) {
+//            System.out.println("erro2 "+e.getMessage());
+//        }
+//    }
     public boolean createCSV() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         //asynchronously retrieve all documents
         ApiFuture<QuerySnapshot> future = firestore.collection("attendance").get();
         // future.get() blocks on response
+
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<Map<String,Object>> data = new ArrayList<>();
         for (QueryDocumentSnapshot document : documents) {
