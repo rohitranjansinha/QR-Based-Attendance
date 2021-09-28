@@ -21,6 +21,7 @@ public class AttService {
         Date date = new Date();
         return dateFormat.format(date);
     }
+
     private String getGender(String name){
         String[] parts = name.split("-");
         if(parts[0].equals("PB")){
@@ -29,10 +30,12 @@ public class AttService {
             return "F";
         }
     }
+
     public String persistAttendance(String uid, String name) throws ExecutionException, InterruptedException {
         String timestamp = currentTimestamp("dd/MM/yyyy HH:mm:ss");
         Firestore firestore = FirestoreClient.getFirestore();
         System.out.println("uid = "+uid);
+        /*Checking if attendance already marked or not*/
         Query query = firestore.collection("attendance").whereEqualTo("uid",uid);
         try{
             boolean flag = query.get().get().isEmpty();
@@ -49,17 +52,7 @@ public class AttService {
                 .set(attendee);
         return collectionsApuFuture.get().getUpdateTime().toString();
     }
-//    public void tempFunc(){
-//        Firestore firestore = FirestoreClient.getFirestore();
-//        Query query = firestore.collection("attendance").whereEqualTo("uid","AJS12847");
-//        try {
-//            System.out.println("query: "+query.get().get().isEmpty());
-//        } catch (InterruptedException e) {
-//            System.out.println("error "+e.getMessage());
-//        } catch (ExecutionException e) {
-//            System.out.println("erro2 "+e.getMessage());
-//        }
-//    }
+
     public boolean createCSV() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         //asynchronously retrieve all documents
@@ -69,22 +62,20 @@ public class AttService {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<Map<String,Object>> data = new ArrayList<>();
         for (QueryDocumentSnapshot document : documents) {
-            //System.out.println("doc = "+document.getData());
             data.add(document.getData());
         }
-        System.out.println("data = "+data);
         PrintWriter pw = null;
         try{
             pw = new PrintWriter(new File("zonal_attendance.csv"));
             StringBuilder col = new StringBuilder();
             col.append("Date & Time").append(",").append("UID").append(",").append("Name").append(",").append("Gender").append("\n");
             pw.write(col.toString());
-            for(int i=0;i<data.size();i++){
+            for (Map<String, Object> datum : data) {
                 Attendee attendee = new Attendee();
-                for(Map.Entry<String,Object> entry : data.get(i).entrySet()){
+                for (Map.Entry<String, Object> entry : datum.entrySet()) {
                     String key = entry.getKey().toString();
                     String val = entry.getValue().toString();
-                    switch (key){
+                    switch (key) {
                         case "uid":
                             attendee.setUID(val);
                             break;
@@ -99,8 +90,7 @@ public class AttService {
                             break;
                     }
                 }
-                //System.out.println("attendee = "+attendee.toString());
-                if(!attendee.getName().equals("HelloWorld")){
+                if (!attendee.getName().equals("HelloWorld")) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(attendee.getTimestamp()).append(",")
                             .append(attendee.getUID()).append(",")

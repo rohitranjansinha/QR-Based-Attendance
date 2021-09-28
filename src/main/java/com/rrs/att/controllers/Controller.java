@@ -22,15 +22,11 @@ public class Controller {
 
     @RequestMapping("/")
     public String welcome(){
-        return "<h1>Hey</h1>";
+        return "<center><h1>Welcome to QR Based Attendance System</h1></center>";
     }
-
-//    @RequestMapping("/test")
-//    public String hey(){ service.tempFunc(); return "<h1>done</h1>";}
 
     @GetMapping("/markmyattendance")
     public String markAttendance(@RequestParam String uid, @RequestParam String name){
-        //System.out.println("uid caught = "+uid);
         try{
             String timestamp = service.persistAttendance(uid,name);
             if(timestamp==null){
