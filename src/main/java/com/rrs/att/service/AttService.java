@@ -24,6 +24,8 @@ public class AttService {
 
     private String getGender(String name){
         String[] parts = name.split(" ");
+//        String tmp = String.join("%20",parts);
+//        System.out.println("name: "+tmp);
         if(parts[0].equals("PB")){
             return "M";
         }else{
@@ -32,6 +34,7 @@ public class AttService {
     }
 
     public String persistAttendance(String uid, String name) throws ExecutionException, InterruptedException {
+        //getGender(name);
         String timestamp = currentTimestamp("dd/MM/yyyy HH:mm:ss");
         Firestore firestore = FirestoreClient.getFirestore();
         System.out.println("uid = "+uid);

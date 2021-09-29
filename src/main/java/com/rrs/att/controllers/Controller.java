@@ -14,12 +14,14 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class Controller {
 
+    private final String credits = "<p>\n\n</p><center><h4>This attendance system was developed by Rohit Ranjan Sinha<p>\n</p>-Varanasi Branch Satsang</h4></center>";
+
     @Autowired
     AttService service;
 
     @RequestMapping("/")
     public String welcome(){
-        return "<center><h1>Welcome to QR Based Attendance System</h1></center>";
+        return "<center><h1>Welcome to QR Based Attendance System</h1></center>"+credits;
     }
 
     @RequestMapping("/markmyattendance/{uid}/{name}")
@@ -28,11 +30,11 @@ public class Controller {
         try{
             String timestamp = service.persistAttendance(uid,name);
             if(timestamp==null){
-                return "<center><h1>Your attendance has already been marked successfully</h1></center>";
+                return "<center><h1>Your attendance has already been marked successfully !</h1></center>"+credits;
             }if(timestamp.equals("")){
-                return "<center><h1>Some error has occurred, please try again later</h1></center>";
+                return "<center><h1>Some error has occurred, please try again later</h1></center>"+credits;
             }
-            return "<center><h1>Attendance Marked Successfully</h1></center>";
+            return "<center><h1>Attendance Marked Successfully !!</h1></center>"+credits;
         }catch (Exception e){
             System.out.println("error: "+e.getMessage());
             return "<center><h1>Try again</h1></center>";
@@ -57,12 +59,12 @@ public class Controller {
 
                 FileCopyUtils.copy(inputStream, response.getOutputStream());
                 response.setContentLength((int) file.length());
-                return "<center><h1>File downloaded to your system</h1></center>";
+                return "<center><h1>File downloaded to your system</h1></center>"+credits;
             }else{
-                return "<center><h1>Some error has occured, please try again</h1></center>";
+                return "<center><h1>Some error has occured, please try again</h1></center>"+credits;
             }
         }catch (Exception e){
-            return "<center><h1>Some error has occured, please try again</h1></center>";
+            return "<center><h1>Some error has occured, please try again</h1></center>"+credits;
         }
     }
 }
