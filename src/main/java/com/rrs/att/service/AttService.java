@@ -23,7 +23,7 @@ public class AttService {
     }
 
     private String getGender(String name){
-        String[] parts = name.split("-");
+        String[] parts = name.split(" ");
         if(parts[0].equals("PB")){
             return "M";
         }else{

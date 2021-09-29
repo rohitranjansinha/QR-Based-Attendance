@@ -3,10 +3,7 @@ package com.rrs.att.controllers;
 import com.rrs.att.service.AttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +22,9 @@ public class Controller {
         return "<center><h1>Welcome to QR Based Attendance System</h1></center>";
     }
 
-    @GetMapping("/markmyattendance")
-    public String markAttendance(@RequestParam String uid, @RequestParam String name){
+    @RequestMapping("/markmyattendance/{uid}/{name}")
+    public String markAttendance(@PathVariable String uid, @PathVariable String name){
+        System.out.println("uid caught: "+uid+" name caught: "+name);
         try{
             String timestamp = service.persistAttendance(uid,name);
             if(timestamp==null){
