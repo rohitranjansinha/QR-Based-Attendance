@@ -30,11 +30,11 @@ public class Controller {
         try{
             String timestamp = service.persistAttendance(uid,name);
             if(timestamp==null){
-                return "<center><h1>Your attendance has already been marked successfully !</h1></center>"+credits;
+                return "<center><h1>"+name+" your attendance has already been marked !</h1></center>"+credits;
             }if(timestamp.equals("")){
                 return "<center><h1>Some error has occurred, please try again later</h1></center>"+credits;
             }
-            return "<center><h1>Attendance Marked Successfully !!</h1></center>"+credits;
+            return "<center><h1>"+name+" you attendance has been marked successfully !!</h1></center>"+credits;
         }catch (Exception e){
             System.out.println("error: "+e.getMessage());
             return "<center><h1>Try again</h1></center>";
